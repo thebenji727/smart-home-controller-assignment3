@@ -1,17 +1,45 @@
-
-
 using SmartHomeLib;
 
 var hub = new SmartHomeHub();
 
-// You will add your devices here once you implement them.
-// Example flow you should be able to run by the end:
-// - create devices
-// - SetOnline(true)
-// - TurnOn()
-// - ApplyModeToAll("Night")
-// - PrintAllStatuses()
+var light = new SmartLight("light-001", "Living Room Light");
+var thermostat = new SmartThermostat("thermo-001", "Hall Thermostat");
+var cam = new SecurityCamera("cam-001", "Front Door Cam", storageCapacityMB: 500);
 
-Console.WriteLine("SmartHomeConsole starting...");
-Console.WriteLine("Add device creation and hub actions once classes are implemented.");
+hub.AddDevice(light);
+hub.AddDevice(thermostat);
+hub.AddDevice(cam);
 
+Console.WriteLine("SmartHomeConsole starting...\n");
+
+// Bring devices online
+light.SetOnline(true);
+thermostat.SetOnline(true);
+cam.SetOnline(true);
+
+// Power on
+light.TurnOn();
+thermostat.TurnOn();
+cam.TurnOn();
+
+// Change settings (requires powered on)
+light.SetBrightness(80);
+light.SetColor("Warm White");
+thermostat.SetTemperature(72);
+
+// Camera recording simulation
+cam.StartRecording();
+cam.SimulateRecording(10); // 10 minutes
+
+Console.WriteLine("=== Before Mode ===");
+hub.PrintAllStatuses();
+
+hub.ApplyModeToAll("Night");
+
+Console.WriteLine("\n=== After Night Mode ===");
+hub.PrintAllStatuses();
+
+hub.TurnOffAll();
+
+Console.WriteLine("\n=== After TurnOffAll ===");
+hub.PrintAllStatuses();
